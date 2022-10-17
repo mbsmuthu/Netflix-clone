@@ -10,6 +10,7 @@ body {
   background-color: black;
  /* z-index: -1; */
   color:white;
+  width:100%;
 }
 
 .app, .movies{
@@ -26,11 +27,17 @@ body {
   object-fit: contain;
 }
 
+.header{
+  position: fixed;
+  z-index: 1;
+}
+
 .app-header{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: .5rem;
+ 
 }
 
 .app-header-left{
@@ -41,14 +48,17 @@ body {
 }
 
 .app-header-searchbar{
-  width: 25rem;
+  width: 85%;
   border-radius: 1rem;
-  height: 1.75rem;
+  /* height: 1.5rem; */
   border: 1px solid lightgray;
   background-color: black;
-  padding:.5rem;
-  padding-inline-start: 1rem;
+  padding:2rem;
+  /* padding-inline-start: 1rem; */
   color:white;
+  margin:5% 0;
+  margin-bottom: 4rem;
+  font-size: medium;
 }
 
 .app-header-searchbar:focus{
@@ -101,13 +111,16 @@ body {
   display: flex;
   flex-direction: row;
   gap:.5rem;
-  overflow:auto;
+  overflow:scroll;
   /* position: relative; */
 
 }
 
 .app-body{
   margin-inline-start: 1rem;
+  position: relative;
+  top:30rem;
+  transform: translateX(0);
 }
 
 .app-section{
@@ -144,16 +157,22 @@ body {
   display: flex;
   justify-content: space-between;
   gap:.5rem;
-  width:95%;
-  margin: 0 auto;
+  width:100%;
+  
   height: 25rem;
-  align-items: center;
+  align-items: flex-start;
+  position: sticky;
+  z-index: 1;
+  background-color: black;
 }
 
 .movie-details{
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
+  width:50%;
+  
 }
 
 .poster-search-container{
@@ -163,4 +182,58 @@ body {
   overflow-y: hidden;
   width: 100%;
   
+}
+
+.movie-buttons{
+  display: flex;
+  gap:2rem;
+}
+
+.movie-btn{
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  background-color: white;
+  border: none;
+  width: 50%;
+}
+
+.movie-btn:focus{
+  background: lightseagreen;
+}
+
+.movie-btn:hover{
+  background: lightslategray;
+  color:white;
+  cursor:pointer;
+}
+
+.search-header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+NavLink{
+  text-decoration: none;
+}
+
+.virtual-keyboard{
+  background: #000;
+  color: black;
+}
+
+.hg-theme-default{
+  color:black;
+  padding: 1rem;
+  
+  margin:auto;
+}
+
+.tabs{
+  display: flex;
+  gap:1rem;
+}
+
+.tabs:first-child:focus{
+  color: lightseagreen;
 }
