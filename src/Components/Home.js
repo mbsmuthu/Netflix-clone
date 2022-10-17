@@ -1,7 +1,21 @@
-import { FaSistrix } from "react-icons/fa";
-import { MdOutlineNotificationsNone } from "react-icons/md";
-import { useState, useEffect } from "react";
+
+import { React, useState, useEffect, useMemo, useContext, createContext } from "react";
 import { Link } from "react-router-dom";
+import Image from "./Image";
+import Tabs from "./Tabs";
+import TrendingMovies from "./TrendingMovies";
+import PopularMovies from "./PopularMovies";
+import MovieSection from "./MovieSection";
+import AppHeader from "./AppHeader";
+
+/*useState Hook is used to set the initial state and further update the state.
+It causes the component to re-render on state update. It is equivalent to setState in
+class components.
+
+useEffect is used to capture side-effects and also used to remove any subscriptions if present*/
+
+export const MovieContext = createContext();
+
 
 let trending = [];
 let popular = [];
@@ -11,8 +25,8 @@ function Home() {
   const [posters, setPosters] = useState([]);
   const [backdrop, setBackdrop] = useState([]);
   const [overview, setOverview] = useState([]);
-
   const [posters1, setPosters1] = useState([]);
+
 
   useEffect(() => {
     Promise.all([
@@ -28,7 +42,7 @@ function Home() {
       setPosters(trending.map((movie) => movie.poster_path));
       setPosters1(popular.map((movie) => movie.poster_path));
       handleTrendingImageClick(0);
-    });
+    }).catch(error=>console.error(error));
   }, []);
 
   const handleTrendingImageClick = (index) => {
@@ -45,69 +59,24 @@ function Home() {
     setBackdrop(popular[index].backdrop_path);
   };
 
+  const MemoTabs = useMemo(()=>{
+    return <Tabs/>
+  },[])
+
   return (
     <div className="App">
-      <div className="app-header">
-        <div className="app-header-left">
-          <img
-            src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2022%2F08%2Fmost-used-netflix-icon-boss-baby-info-tw.jpg?w=960&cbr=1&q=90&fit=max"
-            className="app-main-logo"
-          />
-
-          <p className="app-header-tab">Home</p>
-          <p className="app-header-tab">TV Shows</p>
-          <p className="app-header-tab">Movies</p>
-          <p className="app-header-tab">Latest</p>
-          <p className="app-header-tab">My List</p>
-        </div>
-
-        <div className="app-header-right">
+      <div className="header">
+          <AppHeader MemoTabs={MemoTabs}/>
+          <MovieContext.Provider value={movie}>
+              <MovieSection overview={overview} backdrop={backdrop}/>
+          </MovieContext.Provider>
           
-            <Link to="/search"><FaSistrix size={25} className="app-header-icon" /></Link>
-          
-          <MdOutlineNotificationsNone size={30} className="app-header-icon" />
-          <img
-            src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            className="app-display-pic"
-          />
-        </div>
       </div>
-
+     
       <div className="app-body">
-        <div className="movie-section">
-          <div className="movie-details">
-            <p className="movie-title">{movie}</p>
-            <p className="movie-overview">{overview}</p>
-          </div>
-
-          <img
-            src={`https://image.tmdb.org/t/p/w1280/${backdrop}`}
-            className="background-image"
-          />
-        </div>
-        <p className="app-section">Trending This Week</p>
-        <div className="poster-container">
-          {posters.map((poster, index) => (
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${poster}`}
-              
-
-              className="app-poster"
-              onClick={() => handleTrendingImageClick(index)}
-            ></img>
-          ))}
-        </div>
-
-        <p className="app-section">Popular This Week</p>
-        <div className="poster-container">
-          {posters1.map((poster, index) => (
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${poster}`}
-              className="app-poster"
-              onClick={() => handlePopularImageClick(index, popular)}
-            ></img>
-          ))}
-        </div>
+        
+        <TrendingMovies posters={posters} handleTrendingImageClick={handleTrendingImageClick}/>
+        <PopularMovies posters1={posters1} handlePopularImageClick={handlePopularImageClick} popular={popular}/>
       </div>
     </div>
   );
